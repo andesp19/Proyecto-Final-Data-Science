@@ -4,15 +4,19 @@ import requests
 from datetime import datetime, timedelta
 
 def lambda_handler(event, context):
+    # Obtener sismos de Chile, Estados Unidos y Japón
     sismos_chile = obtener_sismos('chile')
     sismos_usa = obtener_sismos('usa')
     sismos_japon = obtener_sismos('japon')
 
     if sismos_chile or sismos_usa or sismos_japon:
+        # Combinar los sismos de los tres países
         sismos_combinados = sismos_chile + sismos_usa + sismos_japon
+        # Filtrar sismos duplicados
         sismos_combinados_filtrados = filtrar_sismos_duplicados(sismos_combinados)
 
         if sismos_combinados_filtrados:
+            # Guardar los sismos en S3
             guardar_sismos_en_s3(sismos_combinados_filtrados)
 
             return {
@@ -35,6 +39,7 @@ def obtener_sismos(pais):
     fecha_anterior = fecha_actual - timedelta(days=1)
     fecha_anterior_str = fecha_anterior.strftime("%Y-%m-%d")
 
+    # Definir los límites geográficos y el nombre del país
     if pais == 'chile':
         min_latitude = -56.05
         max_latitude = -17.5
@@ -74,8 +79,8 @@ def obtener_sismos(pais):
             coordenadas = sismo["geometry"]["coordinates"]
             latitud = coordenadas[1]
             longitud = coordenadas[0]
+            profundidad = coordenadas[2]  # Obtener la profundidad del sismo
 
-            profundidad = properties.get("depth")
             ubicacion = obtener_ubicacion(lugar)
 
             if ubicacion is not None:
@@ -85,7 +90,7 @@ def obtener_sismos(pais):
                     "hora_sismo": datetime.utcfromtimestamp(fecha_hora / 1000).strftime("%H:%M:%S.%f"),
                     "latitude": latitud,
                     "longitude": longitud,
-                    "profundidad": profundidad if profundidad is not None else '',
+                    "profundidad": profundidad,
                     "mag": magnitud,
                     "ubicacion": ubicacion,
                     "pais": pais_nombre
@@ -93,7 +98,6 @@ def obtener_sismos(pais):
                 sismos_pais.append(sismo_info)
 
         return sismos_pais
-
     else:
         return []
 

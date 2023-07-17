@@ -41,8 +41,8 @@ def lambda_handler(event, context):
         # Combinar los sismos de los diferentes países
         sismos_combinados = sismos_chile + sismos_usa + sismos_japon
 
-        # Filtrar los sismos de la última hora
-        sismos_combinados_filtrados = filtrar_sismos_ultima_hora(sismos_combinados)
+        # Filtrar los sismos de la última hora con magnitud mayor a 4
+        sismos_combinados_filtrados = filtrar_sismos_ultima_hora(sismos_combinados, magnitud_minima=4)
 
         if sismos_combinados_filtrados:
             # Enviar correos electrónicos con los sismos filtrados
@@ -55,7 +55,7 @@ def lambda_handler(event, context):
         else:
             return {
                 'statusCode': 200,
-                'body': 'No hay sismos nuevos en la última hora'
+                'body': 'No hay sismos nuevos con magnitud mayor a 4 en la última hora'
             }
     else:
         return {
@@ -113,8 +113,8 @@ def obtener_sismos(pais):
             coordenadas = sismo["geometry"]["coordinates"]
             latitud = coordenadas[1]
             longitud = coordenadas[0]
-
-            profundidad = properties.get("depth")
+            profundidad = coordenadas[2]  # Agregar esta línea para obtener la profundidad
+            
             ubicacion = obtener_ubicacion(lugar)
 
             # Verificar si el sismo pertenece al país deseado
@@ -152,8 +152,8 @@ def obtener_ubicacion(lugar):
         print("Error al obtener la ubicación del sismo:", e)
         return None
 
-def filtrar_sismos_ultima_hora(sismos):
-    # Filtrar los sismos para obtener solo los de la última hora
+def filtrar_sismos_ultima_hora(sismos, magnitud_minima=0):
+    # Filtrar los sismos para obtener solo los de la última hora con magnitud mayor a magnitud_minima
 
     fecha_actual = datetime.utcnow()
     fecha_anterior = fecha_actual - timedelta(hours=1)
@@ -161,7 +161,7 @@ def filtrar_sismos_ultima_hora(sismos):
     sismos_filtrados = []
     for sismo in sismos:
         dt_sismo = datetime.strptime(sismo["dt_sismo"], "%Y-%m-%d %H:%M:%S.%f+00:00")
-        if dt_sismo >= fecha_anterior and dt_sismo <= fecha_actual:
+        if dt_sismo >= fecha_anterior and dt_sismo <= fecha_actual and sismo["mag"] > magnitud_minima:
             sismos_filtrados.append(sismo)
 
     return sismos_filtrados
@@ -191,7 +191,7 @@ def enviar_emails(sismos):
 def crear_cuerpo_email(sismos):
     # Crear el cuerpo del correo electrónico con la información de los sismos
 
-    cuerpo = "Últimos sismos:\n\n"
+    cuerpo = "Últimos sismos con magnitud mayor a 4:\n\n"
     for sismo in sismos:
         cuerpo += f"Fecha y hora: {sismo['dt_sismo']}\n"
         cuerpo += f"Magnitud: {sismo['mag']}\n"
