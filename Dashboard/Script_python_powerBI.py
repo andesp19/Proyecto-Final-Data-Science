@@ -6,8 +6,8 @@ import pandas as pd
 # Configurar las credenciales de AWS
 s3 = boto3.client(
     "s3",
-    aws_access_key_id="AKIA4JPLITO7VQCH5Z4Z",
-    aws_secret_access_key="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"
+    aws_access_key_id="",
+    aws_secret_access_key="
 )
 
 bucket_name= 'chile-usa-japon'
