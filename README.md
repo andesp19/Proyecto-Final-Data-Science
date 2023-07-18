@@ -96,7 +96,7 @@ En el siguiente link encontraras el sitio web de Earthshake Intelligence  https:
 
 ## Anillo de Fuego del pacifico
 
-<p  align=center><img  src='CF3.png'  width=2000  height=600></p>
+<p  align=center><img  src='img/CF3.png'  width=2000  height=600></p>
 
 
 ## Equipo de trabajo
