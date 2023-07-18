@@ -1,5 +1,5 @@
 # README
-<p  align=center><img  src='Logo-01.png'  width=2000  height=200></p>
+<p  align=center><img  src='img/Logo-01.png'  width=2000  height=200></p>
 
 > "Trabajando hacia la estandarización global de las redes sismológicas
 > y la comunicación efectiva con la comunidad civil"
