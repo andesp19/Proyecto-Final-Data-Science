@@ -102,7 +102,7 @@ for country in countries:
                 peligrosidad = "leve"
             else:
                 peligrosidad = "desconocido"
-                print(f"Sismo desconocido: magnitud {mag}, profundidad {profundidad}")
+                print(f"Sismo de peligrosidad desconocida: magnitud {mag}, profundidad {profundidad}")
 
             country_data.append({
                 "dt_sismo": dt_sismo,
