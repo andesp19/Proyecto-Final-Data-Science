@@ -89,6 +89,8 @@ En el siguiente link encontraras el sitio web de Earthshake Intelligence  https:
 1. Registro link: https://docs.google.com/forms/d/e/1FAIpQLSeX45Wv97NEbgZtreAj-6VbuxhH_SJ7OGsNlBWHrUFxfBJBRg/viewform
 2. Experiencia link: https://docs.google.com/forms/d/e/1FAIpQLSc-qZEx2xIEvzV4hwkDjcug2SZD71X4hxH-WZG2A6Tr-3yM7Q/viewform
 
+## Link a video de youtube
+https://youtu.be/yl4d8oQjb9A
 
 ## Diccionario
 
